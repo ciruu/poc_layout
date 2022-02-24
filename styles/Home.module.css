@@ -4,6 +4,8 @@
   width: 100%;
   height: 90vh;
   border: white solid 5px;
+
+  display: grid;
 }
 
 .footer {

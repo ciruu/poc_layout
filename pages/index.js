@@ -1,23 +1,36 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
+import GridLayout from "../components/GridLayout";
+import MainLayout from "../components/MainVoiceLayout";
 import Box from "../components/Box";
 
 import { useState, useEffect } from "react";
 
 const Home = () => {
-  const [idBox, setIdBox] = useState(0);
-  const [Boxes, setBoxes] = useState([]);
-  const boxes = [];
+  const [boxCount, setBoxCount] = useState(0);
+  const [boxes, setBoxes] = useState([]);
+  const [mainLayout, setMainLayout] = useState(false);
+
+  // Handlers
+  const mainLayoutHandler = () => {
+    const checkMainLayout = document.getElementById("mainLayout");
+    setMainLayout(checkMainLayout.checked);
+  };
 
   const addBoxHandler = () => {
-    setIdBox(idBox + 1);
-    Boxes.push(<Box key={idBox}></Box>);
-    setBoxes(Boxes);
+    const voice = Math.round(Math.random(0, 1));
+    //const voice = 1;
+    boxes.push(<Box key={boxCount} number={boxCount} voice={voice}></Box>);
+    setBoxes(boxes);
+    setBoxCount(boxCount + 1);
+    console.log("boxes :>> ", boxes);
+    console.log("boxCount :>> ", boxCount);
   };
 
   const clearDataHandler = () => {
-    setIdBox(0);
-    setBoxes([]);
+    setBoxes([]); // ???
+    setBoxCount(0);
+    console.clear();
   };
 
   return (
@@ -27,8 +40,23 @@ const Home = () => {
         <meta name="description" content="Show your face, in more pixels." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className={styles.main}>{Boxes}</div>
+      {mainLayout ? (
+        <MainLayout boxes={boxes} />
+      ) : (
+        <GridLayout boxes={boxes} boxCount={boxCount} />
+      )}
+
       <div className={styles.footer}>
+        <div>
+          <label style={{ color: "black", paddingRight: "10px" }}>
+            <input
+              type="checkbox"
+              id="mainLayout"
+              onClick={mainLayoutHandler}
+            />
+            Main Voice Layout
+          </label>
+        </div>
         <button type="button" onClick={addBoxHandler}>
           Add Box
         </button>
