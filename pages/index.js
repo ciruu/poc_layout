@@ -4,33 +4,25 @@ import GridLayout from "../components/GridLayout";
 import MainLayout from "../components/MainVoiceLayout";
 import Box from "../components/Box";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 const Home = () => {
-  const [boxCount, setBoxCount] = useState(0);
   const [boxes, setBoxes] = useState([]);
   const [mainLayout, setMainLayout] = useState(false);
 
   // Handlers
-  const mainLayoutHandler = () => {
-    const checkMainLayout = document.getElementById("mainLayout");
-    setMainLayout(checkMainLayout.checked);
+  const mainLayoutHandler = (e) => {
+    setMainLayout(e.target.checked);
   };
 
   const addBoxHandler = () => {
     const voice = Math.round(Math.random(0, 1));
-    //const voice = 1;
-    boxes.push(<Box key={boxCount} number={boxCount} voice={voice}></Box>);
-    setBoxes(boxes);
-    setBoxCount(boxCount + 1);
-    console.log("boxes :>> ", boxes);
-    console.log("boxCount :>> ", boxCount);
+    const number = btoa(Math.random().toString()).substr(10, 2);
+    setBoxes((prev) => [...prev, { voice, number }]);
   };
 
   const clearDataHandler = () => {
-    setBoxes([]); // ???
-    setBoxCount(0);
-    console.clear();
+    setBoxes([]);
   };
 
   return (
@@ -41,9 +33,9 @@ const Home = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {mainLayout ? (
-        <MainLayout boxes={boxes} />
+        <MainLayout boxes={boxes} Box={Box} />
       ) : (
-        <GridLayout boxes={boxes} boxCount={boxCount} />
+        <GridLayout boxes={boxes} Box={Box} />
       )}
 
       <div className={styles.footer}>
@@ -52,7 +44,7 @@ const Home = () => {
             <input
               type="checkbox"
               id="mainLayout"
-              onClick={mainLayoutHandler}
+              onChange={mainLayoutHandler}
             />
             Main Voice Layout
           </label>

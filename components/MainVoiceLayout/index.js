@@ -1,13 +1,6 @@
 import { useState, useEffect } from "react";
 
-const MainVoiceLayout = (props) => {
-  const boxesProps = props.boxes;
-  console.log("boxesProps :>> ", boxesProps);
-  const voiceBox = boxesProps.find((box) => box.props.voice === 1);
-  const noVoiceBoxes = boxesProps.filter((box) => box.props.voice !== 1);
-
-  const [boxes, setBoxes] = useState(boxesProps);
-
+const MainVoiceLayout = ({ boxes, Box }) => {
   const mainVoiceLayoutStyle = {
     padding: 0,
     margin: 0,
@@ -29,10 +22,24 @@ const MainVoiceLayout = (props) => {
     display: "grid",
   };
 
+  console.log(boxes);
+  console.log("In main layout: ", boxes);
   return (
     <div style={mainVoiceLayoutStyle}>
-      <div style={mainVoiceStyle}>{voiceBox}</div>
-      <div style={userStyle}>{noVoiceBoxes}</div>
+      <div style={mainVoiceStyle}>
+        {boxes
+          .filter((box) => box.voice)
+          .map((box, i) => (
+            <Box key={i} number={box.number} voice={box.voice} />
+          ))}
+      </div>
+      <div style={userStyle}>
+        {boxes
+          .filter((box) => !box.voice)
+          .map((box, i) => (
+            <Box key={i} number={box.number} voice={box.voice} />
+          ))}
+      </div>
     </div>
   );
 };

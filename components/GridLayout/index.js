@@ -1,30 +1,12 @@
-import { useState, useEffect } from "react";
-
-const GridLayout = (props) => {
-  const boxesProps = props.boxes;
-  const boxCountProps = props.boxCount;
-
-  const [templateColumns, setTemplateColumns] = useState("100%");
-  const [boxCount, setIdBox] = useState(boxCountProps);
-  const [boxes, setBoxes] = useState(boxesProps);
-
-  const TEMPLATE_COLUMNS = {
-    1: "100%",
-    2: "50%",
-    3: "50%",
-    5: "33.33333333%",
-    6: "33.33333333%",
-    7: "33.33333333%",
-    8: "33.33333333%",
-    9: "33.33333333%",
-  };
-
-  // Effects
-  useEffect(() => {
-    console.log("useEffect");
-    setTemplateColumns(TEMPLATE_COLUMNS[boxCountProps]);
-    setBoxes(boxes);
-  });
+const GridLayout = ({ boxes, Box }) => {
+  const TEMPLATE_COLUMNS = [
+    "100%",
+    "100%",
+    "50%",
+    "50%",
+    "50%",
+    "33.33333333%",
+  ];
 
   // Styles
   const containerStyle = {
@@ -34,10 +16,19 @@ const GridLayout = (props) => {
     height: "90vh",
     border: "white solid 5px",
     display: "grid",
-    gridTemplateColumns: `repeat(auto-fit, minmax(0, ${templateColumns})`,
+    gridTemplateColumns: `repeat(auto-fit, minmax(0, ${
+      TEMPLATE_COLUMNS[boxes.length] ||
+      TEMPLATE_COLUMNS[TEMPLATE_COLUMNS.length - 1]
+    }))`,
   };
 
-  return <div style={containerStyle}>{boxes}</div>;
+  return (
+    <div style={containerStyle}>
+      {boxes.map((box, i) => (
+        <Box key={i} number={box.number} voice={box.voice} />
+      ))}
+    </div>
+  );
 };
 
 export default GridLayout;
